@@ -83,7 +83,6 @@ func gradeQuiz(problems []problem, answers []problem) {
 			correctCount++
 		}
 	}
-
 	fmt.Printf("\nYou scored %d out of %d.\n\n", correctCount, len(problems))
 }
 
@@ -170,18 +169,3 @@ func main() {
   	gradeQuiz(quizProblems, quizAnswers)
  	exit("Quiz is done!", codeQuizDone)
 }
-
-var csvFilename = strings.NewReader(`5+5,10
-1+1,2
-8+3,11
-1+2,3
-8+6,14
-3+1,4
-1+4,5
-5+1,6
-2+3,5
-3+3,6
-2+4,6
-5+2,7
-`)
-
