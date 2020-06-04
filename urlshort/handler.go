@@ -45,7 +45,8 @@ func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.Handl
 //
 // See MapHandler to create a similar http.HandlerFunc via
 // a mapping of paths to urls.
-/*
+
+/* OLD WAY
 func YAMLHandler(yamlBytes []byte, fallback http.Handler) (http.HandlerFunc, error) {
 	pathUrls, err := parseYamlOrJson(yamlBytes, "yaml")
 	if err != nil {
@@ -54,16 +55,8 @@ func YAMLHandler(yamlBytes []byte, fallback http.Handler) (http.HandlerFunc, err
 	pathsToUrls := buildMap(pathUrls)
 	return MapHandler(pathsToUrls, fallback), nil
 }
-
-func JSONHandler(jsonBytes []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	pathUrls, err := parseYamlOrJson(jsonBytes, "json")
-	if err != nil {
-		return nil, err
-	}
-	pathsToUrls := buildMap(pathUrls)
-	return MapHandler(pathsToUrls, fallback), nil
-}
 */
+
 func DataHandler(dataType string, dataBytes []byte, fallback http.Handler) (http.HandlerFunc, error) {
 	pathUrls, err := parseYamlOrJson(dataType, dataBytes)
 	if err != nil {

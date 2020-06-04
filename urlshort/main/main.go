@@ -28,13 +28,15 @@ func main() {
 
 	// Build the YAMLHandler using the mapHandler as the
 	// fallback
-	yaml := `
+	yaml_default := `
 - path: /urlshort
   url: https://github.com/gophercises/urlshort
 - path: /urlshort-final
   url: https://github.com/gophercises/urlshort/tree/solution
 `
-	
+
+	json_default := `[{}]`
+
 //	var yamlFileBytes []byte
 	yamlBytes := []byte{0}
 	jsonBytes := []byte{0}
@@ -44,7 +46,7 @@ func main() {
 	if isFlagPassed("yaml") {
 		yamlBytes = readAllFile(yamlFilename)
 	} else {
-		yamlBytes = []byte(yaml)
+		yamlBytes = []byte(yaml_default)
 	}
 
 	yamlHandler, err := urlshort.DataHandler("yaml", yamlBytes, mapHandler)
@@ -55,6 +57,8 @@ func main() {
 
 	if isFlagPassed("json") {
 		jsonBytes = readAllFile(jsonFilename)
+	} else {
+		jsonBytes = []byte(json_default)
 	}
 
 	jsonHandler, err := urlshort.DataHandler("json", jsonBytes, yamlHandler)
