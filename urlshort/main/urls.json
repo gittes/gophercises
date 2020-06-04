@@ -1,0 +1,10 @@
+[
+  {
+    "path": "/jsonfileshort",
+    "url": "https://json.org"
+  },
+  {
+    "path": "/jsonls",
+    "url": "https://github.com/Microsoft/vscode/tree/master/extensions/json-language-features/server"
+  }
+]

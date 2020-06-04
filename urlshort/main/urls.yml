@@ -1,0 +1,6 @@
+---
+- path: /yamlfileshort
+  url: https://yaml.org
+- path: /yamlls
+  url: https://github.com/redhat-developer/yaml-language-server/
+...
