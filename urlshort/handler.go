@@ -1,15 +1,16 @@
 package urlshort
 
 import (
-	"fmt"
 	"net/http"
 	yaml "gopkg.in/yaml.v2"
 	"encoding/json"
 )
 
+/*
 func describe(i interface{}) {
-	fmt.Printf("(%+v, %T)\n", i, i)
+	fmt.Printf("(Variable %+v, %T)\n", i, i)
 }
+*/
 
 // MapHandler will return an http.HandlerFunc (which also
 // implements http.Handler) that will attempt to map any
@@ -19,7 +20,6 @@ func describe(i interface{}) {
 // http.Handler will be called instead.
 func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-//		describe(pathsToUrls)
 		originalURL, ok := pathsToUrls[r.URL.Path]
 		if ok {
 			http.Redirect(w, r, originalURL, 301)
@@ -46,16 +46,7 @@ func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.Handl
 // See MapHandler to create a similar http.HandlerFunc via
 // a mapping of paths to urls.
 
-/* OLD WAY
-func YAMLHandler(yamlBytes []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	pathUrls, err := parseYamlOrJson(yamlBytes, "yaml")
-	if err != nil {
-		return nil, err
-	}
-	pathsToUrls := buildMap(pathUrls)
-	return MapHandler(pathsToUrls, fallback), nil
-}
-*/
+// Changed to be called DataHandler to be DRY and generic
 
 func DataHandler(dataType string, dataBytes []byte, fallback http.Handler) (http.HandlerFunc, error) {
 	pathUrls, err := parseYamlOrJson(dataType, dataBytes)
@@ -65,24 +56,6 @@ func DataHandler(dataType string, dataBytes []byte, fallback http.Handler) (http
 	pathsToUrls := buildMap(pathUrls)
 	return MapHandler(pathsToUrls, fallback), nil
 }
-
-/*
-func YAMLbuildMap(pathUrls []YAMLpathUrl) map[string]string {
-	pathsToUrls := make(map[string]string)
-	for _, pu := range pathUrls {
-		pathsToUrls[pu.Path] = pu.URL
-	}
-	return pathsToUrls
-}
-
-func JSONbuildMap(pathUrls []JSONpathUrl) map[string]string {
-	pathsToUrls := make(map[string]string)
-	for _, pu := range pathUrls {
-		pathsToUrls[pu.Path] = pu.URL
-	}
-	return pathsToUrls
-}
-*/
 
 func buildMap(pathUrls []pathUrl) map[string]string {
 	pathsToUrls := make(map[string]string)
@@ -105,10 +78,9 @@ func parseYamlOrJson(dataType string, data []byte) ([]pathUrl, error) {
 		return nil, err
 	}
 	return pathUrls, err
-
 }
 
 type pathUrl struct {
-	Path string `json:"path yaml:"path"`
-	URL  string `json:"url  yaml:"url"`
+	Path string `json:"path" yaml:"path"`
+	URL  string `json:"url"  yaml:"url"`
 }

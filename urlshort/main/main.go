@@ -25,6 +25,7 @@ func main() {
 		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
 	}
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
+	fmt.Println("mapHandler initialized")
 
 	// Build the YAMLHandler using the mapHandler as the
 	// fallback
@@ -35,42 +36,36 @@ func main() {
   url: https://github.com/gophercises/urlshort/tree/solution
 `
 
-	json_default := `[{}]`
-
-//	var yamlFileBytes []byte
 	yamlBytes := []byte{0}
 	jsonBytes := []byte{0}
-//	var jsonFileBytes []byte
 
+
+	if isFlagPassed("json") { 
+		jsonBytes = readAllFile(jsonFilename)
+		fmt.Println("Loaded JSON file")
+	}
 
 	if isFlagPassed("yaml") {
 		yamlBytes = readAllFile(yamlFilename)
+		fmt.Println("Loaded YAML file")
 	} else {
 		yamlBytes = []byte(yaml_default)
+		fmt.Println("Loaded yaml_default")
 	}
 
-	yamlHandler, err := urlshort.DataHandler("yaml", yamlBytes, mapHandler)
+	jsonHandler, err := urlshort.DataHandler("json", jsonBytes, mapHandler)
 	if err != nil {
 		panic(err)
 	}
-
-
-	if isFlagPassed("json") {
-		jsonBytes = readAllFile(jsonFilename)
-	} else {
-		jsonBytes = []byte(json_default)
-	}
-
-	jsonHandler, err := urlshort.DataHandler("json", jsonBytes, yamlHandler)
+	fmt.Println("JSON HTTP Handler initialized")
+		yamlHandler, err := urlshort.DataHandler("yaml", yamlBytes, jsonHandler)
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println("YAML HTTP Handler initialized")
+	
 	fmt.Println("Starting the server on :8080")
-	http.ListenAndServe(":8080", jsonHandler)
-//	http.ListenAndServe(":8080", mapHandler)
-
-
+	http.ListenAndServe(":8080", yamlHandler)
 }
 
 func defaultMux() *http.ServeMux {
@@ -99,7 +94,3 @@ func isFlagPassed(name string) bool {
     })
     return found
 }
-
-
-
-
